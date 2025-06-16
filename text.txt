@@ -1,0 +1,106 @@
+Tecnologias:
+Uma aplicação web utilizando as seguintes tecnologias:
+● Back-end: Implementar endpoints RESTful para CRUD com ORM. Tecnologia: Node Express como servidor web, Sequelize para ORM;
+● Banco de dados: Persistir os dados da aplicação em qualquer banco relacional – SQLite.
+● Front-end: Utilizar framework para a interface do usuário com componentes e layouts modernos. Tecnologia: Vue.js com Nuxt.js. 
+
+Arquitetura:
+Como parte da arquitetura do sistema, devem ser considerados: 
+● Desenvolvimento de um módulo para a interface gráfica; 
+● Desenvolvimento de um módulo (projeto à parte de servidor com API REST) com acesso ao banco de dados; 
+
+Iniciar:
+C:\projeto\>npm start
+ou independentemente:
+
+Testar pelo frontend:
+C:\projeto\frontend>npm run dev
+
+Testes pelo backend:
+C:\projeto\backend>node server.js
+0. Deletar: backend/database.sqlite
+1. Criar:
+Criar Usuário:
+Invoke-RestMethod -Uri http://localhost:3001/usuario -Method POST `
+  -ContentType "application/json" `
+  -Body '{
+    "nomeUser": "Mauro Silva",
+    "email": "mauro@example.com",
+    "senha": "senha123"
+  }'
+Criar Produto:
+Invoke-RestMethod -Uri http://localhost:3001/produto -Method POST `
+  -ContentType "application/json" `
+  -Body '{
+    "nomeProduct": "Caneta Azul",
+    "preco_unitario": 3.5,
+    "descricao": "Caneta para escrita azul",
+    "unidade": "un",
+    "ativo": true
+  }'
+Invoke-RestMethod -Uri http://localhost:3001/produto -Method POST `
+  -ContentType "application/json" `
+  -Body '{
+    "nomeProduct": "Caneta Vermelha",
+    "preco_unitario": 4.0,
+    "descricao": "Caneta para escrita vermelha",
+    "unidade": "un",
+    "ativo": true
+  }'
+
+Criar Pedido:
+1.1.Pedido id:1: 
+Invoke-RestMethod -Uri http://localhost:3001/order -Method POST `
+  -ContentType "application/json" `
+  -Body '{
+    "UserId": 1,
+    "status": "Em andamento",
+    "valor_total": 14.5,
+    "forma_pagamento": "Cartão de Crédito",
+    "produtos": [
+      { "ProductId": 1, "quantidade": 3 },
+      { "ProductId": 2, "quantidade": 1 }
+    ]
+  }'
+
+1.2.Pedido id:2: 
+Invoke-RestMethod -Uri http://localhost:3001/order -Method POST `
+  -ContentType "application/json" `
+  -Body '{
+    "UserId": 1,
+    "status": "Em andamento",
+    "valor_total": 11.0,
+    "forma_pagamento": "Cartão de Crédito",
+    "produtos": [
+      { "ProductId": 1, "quantidade": 4 },
+      { "ProductId": 2, "quantidade": 5 }
+    ]
+  }'
+2. Listar:
+2.1. Listar todos os pedidos (GET /order)
+Invoke-RestMethod -Uri http://localhost:3001/order -Method GET
+
+2.2. Buscar pedido por ID (GET /order/:id)
+Exemplo para buscar pedido com id = 2:
+Invoke-RestMethod -Uri http://localhost:3001/order/2 -Method GET
+
+
+3. Atualizar:
+Atualizando status e total do pedido id=1:
+Invoke-RestMethod -Uri http://localhost:3001/order/1 -Method PUT `
+  -ContentType "application/json" `
+  -Body '{
+    "status": "Finalizado",
+    "forma_pagamento": "Boleto"
+  }'
+
+4. Deletar:
+Deletar pedido id=1:
+Invoke-RestMethod -Uri http://localhost:3001/order/1 -Method DELETE
+
+Verificação: Listar todos os pedidos (GET /order)
+Invoke-RestMethod -Uri http://localhost:3001/order -Method GET
+
+
+
+
