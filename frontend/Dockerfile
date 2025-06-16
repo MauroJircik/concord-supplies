@@ -1,0 +1,18 @@
+FROM node:18
+
+WORKDIR /app
+
+COPY ./frontend/package*.json ./
+RUN npm install
+
+COPY ./frontend .
+
+EXPOSE 3000
+
+ENV NUXT_PORT=3000
+ENV NUXT_HOST=0.0.0.0
+ENV API_BASE_URL=http://backend:3001
+
+CMD ["npx", "nuxt", "dev"]
+
+
