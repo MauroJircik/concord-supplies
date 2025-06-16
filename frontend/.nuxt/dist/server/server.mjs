@@ -1,0 +1,1 @@
+export { default } from "file:///C:/Users/mauro/concord-supplies1/concord-supplies/frontend/node_modules/@nuxt/vite-builder/dist/runtime/vite-node.mjs"
