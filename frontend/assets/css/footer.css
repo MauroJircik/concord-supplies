@@ -1,0 +1,74 @@
+/* footer.css */
+
+/* Variáveis de cor (use no :root se quiser reutilizar) */
+:root {
+    --footer-background: #333333;
+    --footer-title-color: #f4b183;
+    --footer-text-color: white;
+    --footer-link-hover: #f4a261;
+}
+
+/* Container do footer */
+footer {
+    background-color: var(--footer-background);
+    color: var(--footer-text-color);
+    text-align: center;
+    padding: 20px 10px;
+    width: 100%;
+}
+
+/* Container interno que organiza colunas */
+.footer__container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Cada coluna do footer */
+.footer__column {
+    flex: 1 1 200px;
+    min-width: 200px;
+}
+
+/* Títulos das colunas */
+.footer__title {
+    color: var(--footer-title-color);
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+/* Listas do footer */
+.footer__list {
+    list-style: none;
+    padding: 0;
+}
+
+/* Itens da lista */
+.footer__list-item {
+    margin-bottom: 10px;
+}
+
+/* Links dentro do footer */
+.footer__link {
+    text-decoration: none;
+    color: var(--footer-text-color);
+    transition: color 0.3s ease;
+}
+
+.footer__link:hover {
+    color: var(--footer-link-hover);
+}
+
+/* Área inferior do footer */
+.footer__bottom {
+    margin-top: 20px;
+}
+
+.footer__text {
+    font-size: 0.9rem;
+    color: var(--footer-text-color);
+}
