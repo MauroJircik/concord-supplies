@@ -4,10 +4,11 @@
     <h2 class="form__title">
       {{ editando ? "Editar Pedido #" + order.OrderId : "Cadastro de Pedido" }}
     </h2>
-
+    <!-- Formulário: -->
     <form class="form" @submit.prevent="salvarOrderHandler">
       <div class="form__grid">
         <div class="form__col">
+          <!-- Usuário -->
           <div class="form__group">
             <label>ID do Usuário</label>
             <select v-model.number="order.UserId" required>
@@ -18,6 +19,7 @@
             </select>
           </div>
 
+          <!-- Pagamento -->
           <div class="form__group">
             <label>Forma de Pagamento</label>
             <select v-model="order.forma_pagamento" required>
@@ -28,11 +30,13 @@
             </select>
           </div>
 
+          <!-- Data -->
           <div class="form__group">
             <label>Data do Pedido</label>
             <input v-model="order.data_criacao" type="date" required />
           </div>
 
+          <!-- Status -->
           <div class="form__group">
             <label>Status do Pedido</label>
             <select v-model="order.status" required>
@@ -43,6 +47,7 @@
             </select>
           </div>
 
+          <!-- Produtos -->
           <div class="form__group">
             <label>Produtos</label>
             <div v-for="(p, index) in order.produtos" :key="index" class="produto-item">
@@ -59,14 +64,17 @@
             <button type="button" @click="adicionarProduto">➕ Adicionar Produto</button>
           </div>
 
+          <!-- Valor Total -->
           <div class="form__group">
             <label>Valor Total</label>
             <input :value="total.toFixed(2).replace('.',',')" readonly />
           </div>
 
+          <!-- Boão: criar/atualizar formulário -->
           <button type="submit" class="btn-save">
             {{ editando ? "Atualizar" : "Cadastrar" }}
           </button>
+          <!-- Botão: cancelar formulário -->
           <button v-if="editando" type="button" @click="cancelarEdicao" class="btn-cancel">
             Cancelar
           </button>
@@ -74,6 +82,7 @@
       </div>
     </form>
 
+    <!-- Tabela abaixo com os tópicos do formulário -->
     <div class="order-table" v-if="orders.length > 0">
       <div class="order-header">
         <span>ID</span>
@@ -85,6 +94,7 @@
         <span>Ações</span>
       </div>
 
+      <!-- Conteúdo das Linhas -->
       <div class="order-row" v-for="o in orders" :key="o.OrderId">
         <span>{{ o.OrderId }}</span>
         <span>{{ nomeUsuarioPorId(o.UserId) }}</span>
@@ -93,7 +103,9 @@
         <span>{{ o.forma_pagamento }}</span>
         <span>R$ {{ o.valor_total.toFixed(2).replace('.', ',') }}</span>
         <span>
+          <!-- Botão Editar -->
           <button @click="editarOrder(o)" title="Editar">✏️</button>
+          <!-- Botão Excluir -->
           <button @click="removerOrderHandler(o.OrderId)" title="Remover">🗑️</button>
         </span>
       </div>
@@ -122,7 +134,40 @@ const order = ref<Order>({
   produtos: [] as ProdutoItem[]
 })
 
+function resetForm() {
+  order.value = {
+    OrderId: 0,
+    UserId: 0,
+    status: '',
+    data_criacao: '',
+    valor_total: 0,
+    forma_pagamento: '',
+    produtos: []
+  }
+}
+
 const editando = ref(false)
+
+const editarOrder = (pedido: any) => {
+  console.log('Pedido para edição:', pedido);
+  order.value.OrderId = pedido.OrderId;
+  order.value.UserId = pedido.UserId;
+  order.value.forma_pagamento = pedido.forma_pagamento || '';
+  order.value.data_criacao = toInputDateFormat(pedido.data_criacao || '');
+  order.value.status = pedido.status || '';
+  order.value.valor_total = pedido.valor_total ?? 0;
+  order.value.produtos = [];
+
+  if (Array.isArray(pedido.products)) {
+    order.value.produtos = pedido.products.map((prod: any) => ({
+      ProductId: prod.ProductId ?? prod.produtoId,
+      nomeProduct: prod.nomeProduct ?? '',
+      quantidade: prod.OrderProduct?.quantidade ?? prod.quantidade ?? 1,
+      preco_unitario: prod.preco_unitario ?? 0
+    }));
+  }
+  editando.value = true;
+}
 
 function nomeUsuarioPorId(id: number) {
   const user = usuarios.value.find(u => u.UserId === id)
@@ -142,33 +187,6 @@ function atualizarProdutoSelecionado(productId: number, p: ProdutoItem) {
   }
 }
 
-function resetForm() {
-  order.value = {
-    OrderId: 0,
-    UserId: 0,
-    status: '',
-    data_criacao: '',
-    valor_total: 0,
-    forma_pagamento: '',
-    produtos: []
-  }
-}
-
-function statusClass(status: string) {
-  switch (status) {
-    case 'Em andamento': return 'status-pendente'
-    case 'Concluído': return 'status-concluido'
-    case 'Cancelado': return 'status-cancelado'
-    default: return ''
-  }
-}
-
-const total = computed(() => {
-  return order.value.produtos.reduce((acc, p) => {
-    return acc + (p.quantidade * parseFloat(p.preco_unitario.toString() || '0'))
-  }, 0)
-})
-
 function adicionarProduto() {
   order.value.produtos.push({ ProductId: 0, nomeProduct: '', quantidade: 1, preco_unitario: 0 })
 }
@@ -177,32 +195,6 @@ function removerProduto(index: number) {
   order.value.produtos.splice(index, 1)
 }
 
-const editarOrder = (pedido: any) => {
-  console.log('Pedido para edição:', pedido);
-  order.value.OrderId = pedido.OrderId;
-  order.value.UserId = pedido.UserId;
-  order.value.forma_pagamento = pedido.forma_pagamento || '';
-  order.value.data_criacao = toInputDateFormat(pedido.data_criacao || '');
-  order.value.status = pedido.status || '';
-  order.value.valor_total = pedido.valor_total ?? 0;
-  order.value.produtos = [];
-
-
-  if (Array.isArray(pedido.products)) {
-    order.value.produtos = pedido.products.map((prod: any) => ({
-      ProductId: prod.ProductId ?? prod.produtoId,
-      nomeProduct: prod.nomeProduct ?? '',
-      quantidade: prod.OrderProduct?.quantidade ?? prod.quantidade ?? 1,
-      preco_unitario: prod.preco_unitario ?? 0
-    }));
-  }
-  editando.value = true;
-}
-
-function cancelarEdicao() {
-  resetForm()
-  editando.value = false
-}
 
 function formatarData(data: string) {
   if (!data) return ''
@@ -214,6 +206,26 @@ function toInputDateFormat(data: string) {
   if (!data) return ''
   const dt = new Date(data)
   return dt.toISOString().split('T')[0]
+}
+
+const total = computed(() => {
+  return order.value.produtos.reduce((acc, p) => {
+    return acc + (p.quantidade * parseFloat(p.preco_unitario.toString() || '0'))
+  }, 0)
+})
+
+function statusClass(status: string) {
+  switch (status) {
+    case 'Em andamento': return 'status-pendente'
+    case 'Concluído': return 'status-concluido'
+    case 'Cancelado': return 'status-cancelado'
+    default: return ''
+  }
+}
+
+function cancelarEdicao() {
+  resetForm()
+  editando.value = false
 }
 
 async function salvarOrderHandler() {
@@ -271,6 +283,7 @@ onMounted(() => {
   font-family: Arial, sans-serif;
 }
 
+/* Formulário */
 .form__title {
   font-size: 2rem;
   margin-bottom: 1rem;

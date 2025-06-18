@@ -56,7 +56,7 @@
       </form>
     </section>
 
-    <!-- Mapa -->
+    <!-- Mapa google -->
     <section class="map">
       <h2 class="map__title">Nossa Localização</h2>
       <div class="map__container">
@@ -95,6 +95,7 @@ const form = ref({
   margin: 0 auto;
 }
 
+/* Contato Formulário */
 .contact__info,
 .contact__form {
   flex: 1;
@@ -157,6 +158,7 @@ const form = ref({
   background-color: darkorange;
 }
 
+/* Mapa */
 .map {
   margin-top: 3rem;
   padding: 0 2rem;

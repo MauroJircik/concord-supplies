@@ -1,4 +1,4 @@
-// backend/models/User.js
+//Atributos de Usuário:
 export default (sequelize, DataTypes) => {
   return sequelize.define('User', {
     UserId: {

@@ -1,9 +1,8 @@
-// routes/usuario.js
 import { Router } from 'express';
-import { User } from '../models/index.js';  // Importa o modelo User explicitamente
+import { User } from '../models/index.js';
 
 const router = Router();
-// Rota para listar todos os usuários
+//- rota para buscar Usuários:
 router.get('/', async (req, res) => {
     try {
         const usuarios = await User.findAll();
@@ -14,7 +13,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Rota para buscar um usuário por ID
+//- rota para buscar Usuário por id:
 router.get('/:id', async (req, res) => {
     try {
         const usuario = await User.findByPk(req.params.id);
@@ -27,7 +26,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// Rota para criar um novo usuário
+//- rota para criar Usuário:
 router.post('/', async (req, res) => {
     try {
         const { nomeUser, email, senha, tipo, ativo } = req.body;
@@ -39,11 +38,9 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Rota para atualizar um usuário existente
+//- rota para atualizar Usuário:
 router.put('/:id', async (req, res) => {
     try {
-        //const id = req.params.id;
-        //const { nomeUser, email, senha, tipo, ativo } = req.body;
         const usuario = await User.findByPk(req.params.id);
         if (!usuario) return res.status(404).json({ error: 'Usuário não encontrado' });
 
@@ -54,10 +51,9 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-// Rota para deletar um usuário
+//- rota para deletar Usuário:
 router.delete('/:id', async (req, res) => {
     try {
-        //const id = req.params.id;
         const usuario = await User.findByPk(req.params.id);
         if (!usuario) return res.status(404).json({ error: 'Usuário não encontrado' });
 

@@ -3,7 +3,7 @@ import { Order, User, Product, OrderProduct } from '../models/index.js'
 
 const router = Router()
 
-// Middleware para validar o parâmetro :id
+//- validar id:
 const validateIdParam = (req, res, next) => {
   const id = parseInt(req.params.id, 10);
   if (isNaN(id)) {
@@ -13,6 +13,7 @@ const validateIdParam = (req, res, next) => {
   next();
 };
 
+//- formação Order:
 const orderIncludes = [
   { model: User, as: 'user', attributes: ['UserId', 'nomeUser'] },
   {
@@ -23,7 +24,7 @@ const orderIncludes = [
   },
 ];
 
-// Listar todos os pedidos com usuário e produtos
+//- rota para buscar Order:
 router.get('/', async (req, res) => {
   try {
     const orders = await Order.findAll({ include: orderIncludes });
@@ -34,7 +35,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Obter pedido por ID
+//- rota para buscar Obter por id:
 router.get('/:id', validateIdParam, async (req, res) => {
   try {
     const order = await Order.findByPk(req.params.id, {include: orderIncludes });
@@ -49,7 +50,7 @@ router.get('/:id', validateIdParam, async (req, res) => {
   }
 });
 
-// Criar novo pedido
+//- rota para criar Order:
 router.post('/', async (req, res) => {
   try {
     const { UserId, status, valor_total, forma_pagamento, produtos, data_criacao } = req.body;
@@ -69,7 +70,7 @@ router.post('/', async (req, res) => {
       dataCriacaoFinal = data;
     }
 
-    // Criar pedido
+    //- criar Order:
     const order = await Order.create({
       UserId,
       status,
@@ -78,7 +79,6 @@ router.post('/', async (req, res) => {
       data_criacao: dataCriacaoFinal,
     });
 
-    // Associar produtos ao pedido
     for (const produto of produtos) {
       const { ProductId, quantidade } = produto;
       if (typeof ProductId !== 'number' || typeof quantidade !== 'number') {
@@ -87,7 +87,6 @@ router.post('/', async (req, res) => {
       await order.addProduct(ProductId, { through: { quantidade } });
     }
 
-    // Retornar pedido criado com dados completos
     const novoPedido = await Order.findByPk(order.OrderId, {include: orderIncludes });
     res.status(201).json(novoPedido);
   } catch (error) {
@@ -96,7 +95,7 @@ router.post('/', async (req, res) => {
   }
 })
 
-// Atualizar pedido e seus produtos
+//- rota para atualizar Order e Produtos:
 router.put('/:id', validateIdParam, async (req, res) => {
   try {
     const { id } = req.params;
@@ -107,14 +106,11 @@ router.put('/:id', validateIdParam, async (req, res) => {
       return res.status(404).json({ message: 'Pedido não encontrado' });
     }
 
-    // Atualiza apenas os campos do pedido (sem UserId)
     await order.update({ status, valor_total, forma_pagamento });
 
     if (Array.isArray(produtos)) {
-      // Remove associações antigas
       await OrderProduct.destroy({ where: { OrderId: id } });
 
-      // Insere novas associações
       for (const produto of produtos) {
         const { ProductId, quantidade } = produto;
         if (typeof ProductId !== 'number' || typeof quantidade !== 'number') {
@@ -124,7 +120,6 @@ router.put('/:id', validateIdParam, async (req, res) => {
       }
     }
 
-    // Retorna pedido atualizado com detalhes
     const pedidoAtualizado = await Order.findByPk(id, {include: orderIncludes });
     res.json(pedidoAtualizado);
   } catch (error) {
@@ -133,7 +128,7 @@ router.put('/:id', validateIdParam, async (req, res) => {
   }
 });
 
-// Deletar pedido e associações
+//- rota para deletar Order:
 router.delete('/:id', validateIdParam, async (req, res) => {
   try {
     const { id } = req.params;
@@ -142,7 +137,6 @@ router.delete('/:id', validateIdParam, async (req, res) => {
       return res.status(404).json({ message: 'Pedido não encontrado' });
     }
 
-    // Remove associações na tabela OrderProduct para evitar órfãos
     await OrderProduct.destroy({ where: { OrderId: id } });
     await order.destroy();
 

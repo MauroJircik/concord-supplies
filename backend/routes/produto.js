@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { Product } from '../models/index.js';
 
 const router = Router();
-// Listar todos os produtos
+//- rota para buscar Produtos:
 router.get('/', async (req, res) => {
   try {
     const produtos = await Product.findAll();
@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Cadastrar novo produto
+//- rota para criar Produto:
 router.post('/', async (req, res) => {
   try {
     const { nomeProduct, preco_unitario, descricao, unidade, ativo } = req.body;
@@ -25,7 +25,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Atualizar produto
+//- rota para atualizar Produto:
 router.put('/:id', async (req, res) => {
   try {
     const id = req.params.id;
@@ -41,7 +41,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// Remover produto
+//- rota para remover Produto:
 router.delete('/:id', async (req, res) => {
   try {
     const id = req.params.id;

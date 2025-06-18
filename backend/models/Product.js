@@ -1,4 +1,4 @@
-// backend/models/Product.js
+//Atributos de Produtos:
 export default (sequelize, DataTypes) => {
   return sequelize.define('Product', {
     ProductId: {

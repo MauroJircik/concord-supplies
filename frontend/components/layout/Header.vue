@@ -84,7 +84,7 @@ body, html {
   position: relative;
 }
 
-/* Logo aligned left */
+/* Logo */
 .header__logo {
   font-size: 1.8rem;
   font-weight: bold;
@@ -94,7 +94,7 @@ body, html {
   z-index: 2;
 }
 
-/* Navigation list centered horizontally */
+/* Barra de navigação */
 .header__nav-list {
   list-style: none;
   padding: 0;

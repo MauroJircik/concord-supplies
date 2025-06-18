@@ -1,3 +1,4 @@
+//Atributos de Pedido:
 export default (sequelize, DataTypes) => {
   const OrderProduct = sequelize.define('OrderProduct', {
     OrderId: {

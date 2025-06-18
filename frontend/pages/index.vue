@@ -16,7 +16,7 @@
   </template>
   
   <script setup lang="ts">
-  // Nenhum script necessário
+  // Nenhum script necessário!!
   </script>
   
   <style scoped>

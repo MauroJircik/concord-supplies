@@ -5,22 +5,24 @@ import { sequelize } from './models/index.js';
 
 dotenv.config()
 
-// Importa as rotas
+//importar as rotas:
 import produtoRouter from './routes/produto.js';
 import usuarioRouter from './routes/usuario.js';
 import orderRouter from './routes/order.js';
 import orderProdutoRouter from './routes/orderproduto.js';
 
+//- app express:
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Usa as rotas com prefixo de URL
+//- usar as rotas:
 app.use('/produto', produtoRouter);
 app.use('/usuario', usuarioRouter);
 app.use('/order', orderRouter);
 app.use('/orderproduto', orderProdutoRouter);
 
+//- verificações:
 sequelize.authenticate()
   .then(() => console.log('Conexão com o banco feita com sucesso!'))
   .catch(err => console.error('Erro na conexão:', err));

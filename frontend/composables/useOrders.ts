@@ -1,6 +1,7 @@
 import { ref, toRaw } from 'vue'
 import { useRuntimeConfig } from '#imports'
 
+//atributos Produto:
 export interface ProdutoItem {
   ProductId: number
   nomeProduct: string
@@ -8,12 +9,14 @@ export interface ProdutoItem {
   preco_unitario: number
 }
 
-export interface Usuario {
-  UserId: number
-  nomeUser: string
-  email: string
-}
+//atributos Usuário:
+//export interface Usuario {
+//  UserId: number
+//  nomeUser: string
+//  email: string
+//}
 
+//atributos Order:
 export interface Order {
   OrderId: number
   UserId: number
@@ -24,10 +27,12 @@ export interface Order {
   produtos: ProdutoItem[]
 }
 
+//função Order:
 export function userOrders() {
   const config = useRuntimeConfig()
   const orders = ref<Order[]>([])
 
+  //- carregar Order:
   async function carregarOrders() {
     try {
       const data = await $fetch<Order[]>(`${config.public.apiBase}/order`)
@@ -38,6 +43,7 @@ export function userOrders() {
     }
   }
 
+  //- salvar Order:
   async function salvarOrder(order: Order, editando: boolean) {
     order.data_criacao = new Date(order.data_criacao).toISOString()
     const orderPlain = {
@@ -72,6 +78,7 @@ export function userOrders() {
     }
   }
 
+  //- remover Order:
   async function removerOrder(id: number) {
     if (!confirm('Tem certeza que deseja remover este pedido?')) return
     try {
@@ -84,6 +91,7 @@ export function userOrders() {
     }
   }
 
+  //retornos:
   return {
     orders,
     carregarOrders,

@@ -112,7 +112,7 @@ body, html {
   color: #f4a261;
 }
 
-/* Novos estilos para social links em linha */
+/* Links Social */
 .footer__social-list {
   list-style: none;
   padding: 0;

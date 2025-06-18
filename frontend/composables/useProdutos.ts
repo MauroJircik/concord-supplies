@@ -2,6 +2,7 @@ import { ref } from 'vue'
 import { useRuntimeConfig } from '#imports'
 import { $fetch } from 'ofetch'
 
+//atributos Produto:
 export interface Produto {
   ProductId: number
   nomeProduct: string
@@ -11,19 +12,20 @@ export interface Produto {
   ativo: boolean
 }
 
+//função Produtos:
 export function useProdutos() {
   const config = useRuntimeConfig()
   const produtos = ref<Produto[]>([])
 
-  // Carrega todos os produtos do backend
+  //- carregar Produtos:
   async function carregarProdutos() {
     produtos.value = await $fetch<Produto[]>(`${config.public.apiBase}/produto`)
   }
 
-  // Salva um produto: cria se não tem id, atualiza se tem id
+  //- salvar Produto:
   async function salvarProduto(p: Produto) {
     if (p.ProductId && p.ProductId > 0) {
-      // Atualizar
+      //- atualizar:
       await $fetch(`${config.public.apiBase}/produto/${p.ProductId}`, {
         method: 'PUT',
         body: p,
@@ -31,7 +33,7 @@ export function useProdutos() {
       const index = produtos.value.findIndex(prod => prod.ProductId === p.ProductId)
       if (index !== -1) produtos.value[index] = { ...p }
     } else {
-      // Criar
+      //- criar:
       const novoProduto = await $fetch<Produto>(`${config.public.apiBase}/produto`, {
         method: 'POST',
         body: p,
@@ -40,7 +42,7 @@ export function useProdutos() {
     }
   }
 
-  // Remove produto pelo id
+  //- remover Produto:
   async function removerProduto(id: number) {
     await $fetch(`${config.public.apiBase}/produto/${id}`, {
       method: 'DELETE'
@@ -48,6 +50,7 @@ export function useProdutos() {
     produtos.value = produtos.value.filter(p => p.ProductId !== id)
   }
 
+  //- retornos:
   return {
     produtos,
     carregarProdutos,

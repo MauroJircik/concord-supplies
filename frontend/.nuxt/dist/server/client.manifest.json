@@ -7,12 +7,12 @@
     "module": true,
     "resourceType": "script"
   },
-  "C:/Users/mauro/concord-supplies1/concord-supplies/frontend/node_modules/nuxt/dist/app/entry.js": {
+  "C:/Users/mauro/concord-supplies/frontend/node_modules/nuxt/dist/app/entry.js": {
     "resourceType": "script",
     "module": true,
     "prefetch": true,
     "preload": true,
     "isEntry": true,
-    "file": "C:/Users/mauro/concord-supplies1/concord-supplies/frontend/node_modules/nuxt/dist/app/entry.js"
+    "file": "C:/Users/mauro/concord-supplies/frontend/node_modules/nuxt/dist/app/entry.js"
   }
 }

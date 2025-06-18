@@ -3,7 +3,7 @@ import { OrderProduct, Order, Product } from '../models/index.js'
 
 const router = Router()
 
-// Listar todos os itens de pedido com pedido e produto
+//- rota para buscar os itens de Order:
 router.get('/', async (req, res) => {
   try {
     const orderProdutos = await OrderProduct.findAll({
@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Adicionar item ao pedido
+//- rota para criar item de Order:
 router.post('/', async (req, res) => {
   try {
     const { orderId, productId, quantidade } = req.body;
@@ -36,7 +36,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Atualizar quantidade do item (por OrderId e ProductId)
+//- rota para atualizar quantidade do item de Order por id:
 router.put('/:orderId/:productId', async (req, res) => {
   try {
     const { orderId, productId } = req.params;
@@ -55,7 +55,7 @@ router.put('/:orderId/:productId', async (req, res) => {
   }
 });
 
-// Remover item do pedido (por OrderId e ProductId)
+//- rota para remover item de Order por id:
 router.delete('/:orderId/:productId', async (req, res) => {
   try {
     const { orderId, productId } = req.params
